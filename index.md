@@ -1,9 +1,6 @@
 ---
 layout: home
 ---
-
-# Welcome to ED Math Documentation
-
 This is a collection of mathematical documentation for Elite: Dangerous. Browse the pages below or use the search to find specific topics.
 
 <div class="search-container">

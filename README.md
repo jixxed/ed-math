@@ -41,7 +41,6 @@ A documentation website for Elite: Dangerous mathematical formulas and calculati
 ## Adding New Content
 
 1. Create a new folder in the `pages` directory with a descriptive name (e.g., `combat-calculations`)
-2. Add a `description.md` file with a brief description of the page
 3. Create an `index.md` file with your content
 4. Submit a pull request
 
@@ -50,10 +49,8 @@ A documentation website for Elite: Dangerous mathematical formulas and calculati
 ```
 pages/
   combat-calculations/
-    description.md
     index.md
   mining-yields/
-    description.md
     index.md
 ```
 
