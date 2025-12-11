@@ -1,0 +1,29 @@
+title: ED Math Documentation
+description: A collection of mathematical documentation for Elite: Dangerous
+baseurl: "/ed-math" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor
+
+# MathJax support
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
+  math_engine_opts: {}
+
+# Search configuration
+search: true
