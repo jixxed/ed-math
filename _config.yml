@@ -1,7 +1,7 @@
 title: ED Math Documentation
 description: A collection of mathematical documentation for Elite: Dangerous
 baseurl: "/ed-math" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://jixxed.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 theme: minima
