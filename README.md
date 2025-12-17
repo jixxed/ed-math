@@ -65,10 +65,3 @@ This site supports LaTeX math notation using MathJax:
 
 This site is automatically deployed to GitHub Pages when changes are pushed to the `main` branch.
 
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
