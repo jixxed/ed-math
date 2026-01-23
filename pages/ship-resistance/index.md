@@ -25,13 +25,13 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 
 1. **Calculate the lower bound:**
    $$
-   \text{lowerBound} = \max(\text{MIN\_LOWER\_BOUND}, \text{baseResistance})
+   \text{lowerBound} = \max(\text{MIN_LOWER_BOUND}, \text{baseResistance})
    $$
-   where $\text{MIN\_LOWER\_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
+   where $\text{MIN_LOWER_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
 
 2. **Set the upper bound:**
    $$
-   \text{UPPER\_BOUND} = 0.65
+   \text{UPPER_BOUND} = 0.65
    $$
    The upper bound is 65% (0.65). This represents the maximum resistance that 100% multiplicative stacking would be compressed to.
 
@@ -43,14 +43,14 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 
 4. **Apply diminishing returns:**
    $$
-   \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER\_BOUND} - \text{lowerBound})
+   \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER_BOUND} - \text{lowerBound})
    $$
    This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
 
 5. **Determine effective resistance:**
    $$
    \text{effectiveResistance} = \begin{cases}
-   \text{cappedResistance} & \text{if } \text{cappedResistance} \geq \text{MIN\_LOWER\_BOUND} \\
+   \text{cappedResistance} & \text{if } \text{cappedResistance} \geq \text{MIN_LOWER_BOUND} \\
    \text{stackedResistance} & \text{otherwise}
    \end{cases}
    $$
