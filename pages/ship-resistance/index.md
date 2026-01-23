@@ -32,24 +32,28 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    where $\text{MIN_LOWER_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
 
 2. **Set the upper bound:**
+
    $$
    \text{UPPER_BOUND} = 0.65
    $$
    The upper bound is 65% (0.65). This represents the maximum resistance that 100% multiplicative stacking would be compressed to.
 
 3. **Calculate multiplicative stacking:**
+
    $$
    \text{stackedResistance} = 1 - (1 - \text{baseResistance}) \times (1 - \text{moduleResistance})
    $$
    This represents the resistance if modules stacked multiplicatively without diminishing returns.
 
 4. **Apply diminishing returns:**
+
    $$
    \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER_BOUND} - \text{lowerBound})
    $$
    This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
 
 5. **Determine effective resistance:**
+
    $$
    \text{effectiveResistance} = \begin{cases}
    \text{cappedResistance} & \text{if } \text{cappedResistance} \geq \text{MIN_LOWER_BOUND} \\
@@ -89,6 +93,7 @@ The resistance calculation processes modules in a specific order:
 ### 1. Base Resistance
 
 The calculation starts with the base resistance from the **armor slot**:
+
 $$
 \text{shipResistance} = \text{armorResistance}
 $$
@@ -122,6 +127,7 @@ $$
 ### 5. Sequential Application
 
 Each module is processed sequentially:
+
 $$
 \text{shipResistance}_{i+1} = \text{stackDamageResistance}(\text{shipResistance}_i, \text{adaptedModuleResistance}_i)
 $$
@@ -131,6 +137,7 @@ Where $\text{shipResistance}_{0}$ is the ships armor resistance, including any e
 ### 6. Final Result
 
 After **all** modules have been processed, the final resistance is capped at 75% and returned as a percentage:
+
 $$
 \text{finalResistance} = \min(0.75, \text{shipResistance}_{\text{final}}) \times 100\%
 $$
