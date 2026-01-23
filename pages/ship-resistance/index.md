@@ -4,6 +4,8 @@ title: Ship Resistance Calculation
 description: Mathematical explanation of how damage resistance is calculated for ship armor and hull reinforcement packages in Elite: Dangerous.
 ---
 
+January 23, 2026, CMDR Jixxed
+
 # Ship Resistance Calculation
 
 This document explains the mathematical formulas used to calculate effective damage resistance for ships in Elite: Dangerous, specifically for armor and hull reinforcement packages.
@@ -173,6 +175,8 @@ Let's calculate kinetic resistance for a ship with:
 
 ## References
 
-The formula is based on community research from the Elite: Dangerous forums:
+The original formula is based on community research from the Elite: Dangerous forums:
 - [Kinetic Resistance Calculation](https://forums.frontier.co.uk/threads/kinetic-resistance-calculation.266235/post-4230114)
 - [Shield Booster Mod Calculator](https://forums.frontier.co.uk/threads/shield-booster-mod-calculator.286097/post-4998592)
+
+The new formula was determined by CMDR Jixxed in January 2026 based on empirical testing and analysis of in-game resistance values.
