@@ -4,6 +4,11 @@
 
 @import "minima";
 
+// Increase page width for better formula display
+.wrapper {
+  max-width: 1400px;
+}
+
 .page-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -55,6 +60,12 @@
   overflow-x: auto;
   overflow-y: hidden;
   margin: 1rem 0;
+  text-align: left !important;
+}
+
+// Left-align MathJax display containers
+.MathJax {
+  text-align: left !important;
 }
 
 // Code blocks
