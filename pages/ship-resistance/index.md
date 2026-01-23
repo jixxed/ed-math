@@ -179,4 +179,4 @@ The original formula is based on community research from the Elite: Dangerous fo
 - [Kinetic Resistance Calculation](https://forums.frontier.co.uk/threads/kinetic-resistance-calculation.266235/post-4230114)
 - [Shield Booster Mod Calculator](https://forums.frontier.co.uk/threads/shield-booster-mod-calculator.286097/post-4998592)
 
-The new formula was determined by CMDR Jixxed in January 2026 based on empirical testing and analysis of in-game resistance values.
+The new formula was determined by CMDR Jixxed in January 2026 based on empirical testing and analysis of in-game resistance values, with assistance of CMDR Shea providing test cases.
