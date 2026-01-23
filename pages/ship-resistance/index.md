@@ -54,8 +54,8 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    $$
    \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER_BOUND} - \text{lowerBound})
    $$
-   
-5. This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
+
+   This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
 
 5. **Determine effective resistance:**
 
