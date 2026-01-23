@@ -26,9 +26,11 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 ### Formula Steps
 
 1. **Calculate the lower bound:**
+
    $$
    \text{lowerBound} = \max(\text{MIN_LOWER_BOUND}, \text{baseResistance})
    $$
+
    where $\text{MIN_LOWER_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
 
 2. **Set the upper bound:**
@@ -36,6 +38,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    $$
    \text{UPPER_BOUND} = 0.65
    $$
+   
    The upper bound is 65% (0.65). This represents the maximum resistance that 100% multiplicative stacking would be compressed to.
 
 3. **Calculate multiplicative stacking:**
@@ -43,6 +46,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    $$
    \text{stackedResistance} = 1 - (1 - \text{baseResistance}) \times (1 - \text{moduleResistance})
    $$
+   
    This represents the resistance if modules stacked multiplicatively without diminishing returns.
 
 4. **Apply diminishing returns:**
@@ -50,7 +54,8 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    $$
    \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER_BOUND} - \text{lowerBound})
    $$
-   This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
+   
+5. This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
 
 5. **Determine effective resistance:**
 
@@ -60,6 +65,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    \text{stackedResistance} & \text{otherwise}
    \end{cases}
    $$
+
    Use the capped resistance if it's above the minimum lower bound, otherwise use the stacked resistance.
 
    **Note:** The 75% hard cap is not applied during individual module stacking. It is only applied once at the very end after all modules have been processed.
