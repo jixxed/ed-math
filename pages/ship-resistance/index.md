@@ -175,19 +175,40 @@ Let's calculate kinetic resistance for a ship with:
 **Process HRP 1 (25%):**
 
     adaptedModuleResistance = 0.25 (no bonus, ≤ 30%)
-    lowerBound = max(0.30, 0.35) = 0.35
-    stackedResistance = 1 - (1 - 0.35) × (1 - 0.25) = 1 - 0.65 × 0.75 = 0.5125
-    cappedResistance = 0.35 + (0.5125 - 0.35) / (1 - 0.35) × (0.65 - 0.35) = 0.35 + 0.1625 / 0.65 × 0.30 = 0.425
+
+    lowerBound = max(0.30, 0.35) 
+               = 0.35
+
+    stackedResistance = 1 - (1 - 0.35) × (1 - 0.25) 
+                      = 1 - 0.65 × 0.75 
+                      = 0.5125
+
+    cappedResistance = 0.35 + (0.5125 - 0.35) / (1 - 0.35) × (0.65 - 0.35) 
+                     = 0.35 + 0.1625 / 0.65 × 0.30 
+                     = 0.425
+
     effectiveResistance = 0.425 (since cappedResistance ≥ 0.30)
+
     shipResistance = 0.425 (42.5%)
 
 **Process HRP 2 (40%):**
 
-    adaptedModuleResistance = 0.40 × 2.0 - 0.3 = 0.50
-    lowerBound = max(0.30, 0.425) = 0.425
-    stackedResistance = 1 - (1 - 0.425) × (1 - 0.50) = 1 - 0.575 × 0.50 = 0.7125
-    cappedResistance = 0.425 + (0.7125 - 0.425) / (1 - 0.425) × (0.65 - 0.425) = 0.425 + 0.2875 / 0.575 × 0.225 = 0.5375
+    adaptedModuleResistance = 0.40 × 2.0 - 0.3 
+                            = 0.50
+
+    lowerBound = max(0.30, 0.425) 
+               = 0.425
+
+    stackedResistance = 1 - (1 - 0.425) × (1 - 0.50) 
+                      = 1 - 0.575 × 0.50 
+                      = 0.7125
+
+    cappedResistance = 0.425 + (0.7125 - 0.425) / (1 - 0.425) × (0.65 - 0.425) 
+                     = 0.425 + 0.2875 / 0.575 × 0.225 
+                     = 0.5375
+
     effectiveResistance = 0.5375 (since cappedResistance ≥ 0.30)
+
     shipResistance = 0.5375 (53.75%)
 
 **Apply final cap:** `finalResistance = min(0.75, 0.5375) = 0.5375` (53.75%)
