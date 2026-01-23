@@ -20,8 +20,8 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 
 ### Parameters
 
-- **baseResistance**: The current resistance value (0.0 to 1.0)
-- **moduleResistance**: The additional resistance from a module (0.0 to 1.0)
+- **baseResistance**: The current resistance value
+- **moduleResistance**: The additional resistance from a module
 
 ### Formula Steps
 
