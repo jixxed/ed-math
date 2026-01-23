@@ -126,7 +126,7 @@ $$
 \text{shipResistance}_{i+1} = \text{stackDamageResistance}(\text{shipResistance}_i, \text{adaptedModuleResistance}_i)
 $$
 
-Where $\text{shipResistance}_{0}$ is the base armor resistance.
+Where $\text{shipResistance}_{0}$ is the ships armor resistance, including any engineering.
 
 ### 6. Final Result
 
