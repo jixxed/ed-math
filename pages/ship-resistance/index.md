@@ -1,14 +1,14 @@
 ---
 layout: default
 title: Ship Resistance Calculation
-description: Mathematical explanation of how damage resistance is calculated for ship armor and hull reinforcement packages in Elite: Dangerous.
+description: Mathematical explanation of how damage resistance is calculated for ship armour and hull reinforcement packages in Elite: Dangerous.
 ---
 
 # Ship Resistance Calculation
 
 January 23, 2026, CMDR Jixxed
 
-This document explains the mathematical formulas used to calculate effective damage resistance for ships in Elite: Dangerous, specifically for armor and hull reinforcement packages.
+This document explains the mathematical formulas used to calculate effective damage resistance for ships in Elite: Dangerous, specifically for armour and hull reinforcement packages.
 
 ## Overview
 
@@ -20,7 +20,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 
 ### Parameters
 
-- **baseResistance**: The current resistance value
+- **currentResistance**: The current resistance value
 - **moduleResistance**: The additional resistance from a module
 
 ### Formula Steps
@@ -28,7 +28,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 1. **Calculate the lower bound:**
 
    $$
-   \text{lowerBound} = \max(\text{MIN_LOWER_BOUND}, \text{baseResistance})
+   \text{lowerBound} = \max(\text{MIN_LOWER_BOUND}, \text{currentResistance})
    $$
 
    where $\text{MIN_LOWER_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
@@ -44,7 +44,7 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 3. **Calculate multiplicative stacking:**
 
    $$
-   \text{stackedResistance} = 1 - (1 - \text{baseResistance}) \times (1 - \text{moduleResistance})
+   \text{stackedResistance} = 1 - (1 - \text{currentResistance}) \times (1 - \text{moduleResistance})
    $$
    
    This represents the resistance if modules stacked multiplicatively without diminishing returns.
@@ -73,22 +73,36 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
 ### Example Calculation
 
 Let's say we have:
-- `baseResistance = 0.40` (40%)
+- `currentResistance = 0.40` (40%)
 - `moduleResistance = 0.30` (30%)
 
-**Step 1:** `lowerBound = max(0.30, 0.40) = 0.40`
+**Step 1:**
 
-**Step 2:** `UPPER_BOUND = 0.65`
+    lowerBound = max(0.30, 0.40)
+    = 0.40
 
-**Step 3:** `stackedResistance = 1 - (1 - 0.40) × (1 - 0.30) = 1 - 0.60 × 0.70 = 1 - 0.42 = 0.58`
+**Step 2:** 
 
-**Step 4:** `cappedResistance = 0.40 + (0.58 - 0.40) / (1 - 0.40) × (0.65 - 0.40)`
-   - `= 0.40 + 0.18 / 0.60 × 0.25`
-   - `= 0.40 + 0.30 × 0.25`
-   - `= 0.40 + 0.075`
-   - `= 0.475` (47.5%)
+    UPPER_BOUND = 0.65
 
-**Step 5:** Since `cappedResistance = 0.475 ≥ 0.30`, `effectiveResistance = 0.475` (47.5%)
+**Step 3:** 
+
+    stackedResistance = 1 - (1 - 0.40) × (1 - 0.30)
+    = 1 - 0.60 × 0.70
+    = 1 - 0.42
+    = 0.58 (58%)
+
+**Step 4:** 
+
+    cappedResistance = 0.40 + (0.58 - 0.40) / (1 - 0.40) × (0.65 - 0.40)
+    = 0.40 + 0.18 / 0.60 × 0.25
+    = 0.40 + 0.30 × 0.25
+    = 0.40 + 0.075
+    = 0.475 (47.5%)
+
+**Step 5:** 
+
+Since `cappedResistance = 0.475 ≥ 0.30`, `effectiveResistance = 0.475` (47.5%)
 
 
 
@@ -98,10 +112,10 @@ The resistance calculation processes modules in a specific order:
 
 ### 1. Base Resistance
 
-The calculation starts with the base resistance from the **armor slot**:
+The calculation starts with the resistance from the **armour slot**, including engineering:
 
 $$
-\text{shipResistance} = \text{armorResistance}
+\text{shipResistance}_{0} = \text{armourResistance}
 $$
 
 ### 2. Hull Reinforcement Packages
@@ -114,10 +128,11 @@ The system processes the following module types:
 ### 3. Module Sorting Order
 
 Modules are sorted by **Resistance value**: Lower resistance values are processed first (ascending order)
+Each resistance type is processed individually and will therefore have its own ordering of all the modules.
 
 ### 4. Special Bonus for High Resistance Modules
 
-For each module, if the module's resistance exceeds 30%, it receives a **double bonus**:
+For each module, if the module's resistance exceeds 30%, it receives a **doubling bonus** for the portion exceeding 30%:
 
 $$
 \text{adaptedModuleResistance} = \begin{cases}
@@ -138,7 +153,7 @@ $$
 \text{shipResistance}_{i+1} = \text{stackDamageResistance}(\text{shipResistance}_i, \text{adaptedModuleResistance}_i)
 $$
 
-Where $\text{shipResistance}_{0}$ is the ships armor resistance, including any engineering.
+Where $\text{shipResistance}_{0}$ is the ships armour resistance, including any engineering.
 
 ### 6. Final Result
 
@@ -151,27 +166,29 @@ $$
 ## Complete Example
 
 Let's calculate kinetic resistance for a ship with:
-- Base armor kinetic resistance: 35% (0.35)
+- Base armour kinetic resistance: 35% (0.35)
 - HRP 1: 25% kinetic resistance (0.25) - processed first due to lower value
 - HRP 2: 40% kinetic resistance (0.40)
 
 **Initial:** `shipResistance = 0.35`
 
 **Process HRP 1 (25%):**
-- `adaptedModuleResistance = 0.25` (no bonus, ≤ 30%)
-- `lowerBound = max(0.30, 0.35) = 0.35`
-- `stackedResistance = 1 - (1 - 0.35) × (1 - 0.25) = 1 - 0.65 × 0.75 = 0.5125`
-- `cappedResistance = 0.35 + (0.5125 - 0.35) / (1 - 0.35) × (0.65 - 0.35) = 0.35 + 0.1625 / 0.65 × 0.30 = 0.425`
-- `effectiveResistance = 0.425` (since `cappedResistance ≥ 0.30`)
-- `shipResistance = 0.425` (42.5%)
+
+    adaptedModuleResistance = 0.25 (no bonus, ≤ 30%)
+    lowerBound = max(0.30, 0.35) = 0.35
+    stackedResistance = 1 - (1 - 0.35) × (1 - 0.25) = 1 - 0.65 × 0.75 = 0.5125
+    cappedResistance = 0.35 + (0.5125 - 0.35) / (1 - 0.35) × (0.65 - 0.35) = 0.35 + 0.1625 / 0.65 × 0.30 = 0.425
+    effectiveResistance = 0.425 (since cappedResistance ≥ 0.30)
+    shipResistance = 0.425 (42.5%)
 
 **Process HRP 2 (40%):**
-- `adaptedModuleResistance = 0.40 × 2.0 - 0.3 = 0.50`
-- `lowerBound = max(0.30, 0.425) = 0.425`
-- `stackedResistance = 1 - (1 - 0.425) × (1 - 0.50) = 1 - 0.575 × 0.50 = 0.7125`
-- `cappedResistance = 0.425 + (0.7125 - 0.425) / (1 - 0.425) × (0.65 - 0.425) = 0.425 + 0.2875 / 0.575 × 0.225 = 0.5375`
-- `effectiveResistance = 0.5375` (since `cappedResistance ≥ 0.30`)
-- `shipResistance = 0.5375` (53.75%)
+
+    adaptedModuleResistance = 0.40 × 2.0 - 0.3 = 0.50
+    lowerBound = max(0.30, 0.425) = 0.425
+    stackedResistance = 1 - (1 - 0.425) × (1 - 0.50) = 1 - 0.575 × 0.50 = 0.7125
+    cappedResistance = 0.425 + (0.7125 - 0.425) / (1 - 0.425) × (0.65 - 0.425) = 0.425 + 0.2875 / 0.575 × 0.225 = 0.5375
+    effectiveResistance = 0.5375 (since cappedResistance ≥ 0.30)
+    shipResistance = 0.5375 (53.75%)
 
 **Apply final cap:** `finalResistance = min(0.75, 0.5375) = 0.5375` (53.75%)
 
