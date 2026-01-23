@@ -145,6 +145,7 @@ The **damage split ratio** is determined by the weapon type:
 - The module may also **malfunction** if it has taken enough damage
 
 **Damage Split Formula:**
+
 $$
 \text{moduleDamage} = \text{damageAfterHardness} \times \text{weaponModuleRatio}
 $$
