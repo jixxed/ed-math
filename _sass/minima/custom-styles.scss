@@ -1,8 +1,3 @@
----
-# Front matter ensures Jekyll processes this file
----
-
-@import "minima";
 
 // Increase page width for better formula display
 .wrapper {
@@ -22,33 +17,33 @@
   border-radius: 4px;
   padding: 1.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
+
   h2 {
     margin-top: 0;
     font-size: 1.5rem;
-    
+
     a {
       color: $text-color;
       text-decoration: none;
-      
+
       &:hover {
         color: $brand-color;
       }
     }
   }
-  
+
   .read-more {
     display: inline-block;
     margin-top: 0.5rem;
     color: $brand-color;
     text-decoration: none;
     font-weight: bold;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -73,7 +68,7 @@
   border-radius: 4px;
   padding: 1rem;
   margin: 1rem 0;
-  
+
   pre {
     margin: 0;
     overflow-x: auto;
@@ -85,4 +80,38 @@
   .page-list {
     grid-template-columns: 1fr;
   }
+}
+//
+//:root {
+//  --bg: #ffffff;
+//  --text: #222222;
+//  --link: #2a7ae2;
+//}
+//
+//[data-theme="dark"] {
+//  --bg: #121212;
+//  --text: #e6e6e6;
+//  --link: #8ab4f8;
+//}
+//
+//body {
+//  background: var(--bg);
+//  color: var(--text);
+//}
+//
+//a {
+//  color: var(--link);
+//}
+
+
+#icon-sun {
+  width: 1.5rem;
+  height: 1.5rem;
+  //display: none;
+}
+
+#icon-moon {
+  width: 1.5rem;
+  height: 1.5rem;
+  //display: none;
 }
