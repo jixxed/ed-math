@@ -3,8 +3,8 @@ layout: page
 title: Ship Resistance Calculation
 description: "Mathematical explanation of how damage resistance is calculated for ship armour and hull reinforcement packages in Elite: Dangerous."
 author: CMDR Jixxed
-date: 2025-01-23
-modified_date: 2025-01-25
+date: 2026-01-23
+modified_date: 2026-01-25
 ---
 This document explains the mathematical formulas used to calculate effective damage resistance for ships in Elite: Dangerous, specifically for armour and hull reinforcement packages.
 

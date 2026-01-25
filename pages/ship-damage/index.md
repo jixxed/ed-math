@@ -3,8 +3,8 @@ layout: page
 title: Ship Damage Calculation
 description: "Mathematical explanation of how damage is calculated and applied to ships in Elite: Dangerous, including shields, hull, and modules."
 author: CMDR Jixxed
-date: 2025-01-23
-modified_date: 2025-01-25
+date: 2026-01-23
+modified_date: 2026-01-25
 ---
 
 # Ship Damage Calculation
