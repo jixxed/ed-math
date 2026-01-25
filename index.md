@@ -14,11 +14,11 @@ This is a collection of mathematical documentation for Elite: Dangerous. Browse 
   {% for page in sorted_pages %}
     {% if page.dir contains '/pages/' and page.name == 'index.md' %}
       <div class="page-card" data-title="{{ page.title | downcase }}" data-description="{{ page.description | downcase }}">
-        <h2><a href="{{ page.url | relative_url }}" class="page-title">{{ page.title }}</a></h2>
+        <h2><a href="/{{ page.url | relative_url }}" class="page-title">{{ page.title }}</a></h2>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <span class="post-meta">{{ page.date | date: date_format }}</span>
         <p class="page-description">{{ page.description }}</p>
-        <a href="{{ page.url | relative_url }}" class="read-more">Read more →</a>
+        <a href="/{{ page.url | relative_url }}" class="read-more">Read more →</a>
       </div>
     {% endif %}
   {% endfor %}
