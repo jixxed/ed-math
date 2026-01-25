@@ -10,16 +10,21 @@ This document explains the mathematical formulas used to calculate effective dam
 
 ## Overview
 
-The resistance calculation system applies **diminishing returns** to prevent resistance values from becoming too high. The system processes modules sequentially, applying a special formula that caps effective resistance while allowing multiplicative stacking.
+The resistance calculation system stacks resistances sequentially, applies a doubling bonus for high resistance modules, and a halving penalty when crossing a threshold.
 
 ## Core Formula: Stack Damage Resistance
 
-The heart of the calculation is the `stackDamageResistance` function, which applies diminishing returns to resistance values:
+The heart of the calculation is the `stackDamageResistance` function. It diminishes the stacked resistance if the resulting resistance crosses the 30% barrier.
 
 ### Parameters
 
 - **currentResistance**: The current resistance value
 - **moduleResistance**: The additional resistance from a module
+
+### Constants
+
+- **MIN_LOWER_BOUND**: 0.30. The lower bound for the `cappedResistance` formula is set to at least 30%.
+- **UPPER_BOUND**: 0.65. The upper bound for the `cappedResistance` formula is set to at least 65%.
 
 ### Formula Steps
 
@@ -29,33 +34,25 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    \text{lowerBound} = \max(\text{MIN_LOWER_BOUND}, \text{currentResistance})
    $$
 
-   where $\text{MIN_LOWER_BOUND} = 0.30$. The lower bound for diminishing returns is set to at least 30% (0.30).
-
-2. **Set the upper bound:**
-
-   $$
-   \text{UPPER_BOUND} = 0.65
-   $$
-   
-   The upper bound is 65% (0.65). This represents the maximum resistance that 100% multiplicative stacking would be compressed to.
-
-3. **Calculate multiplicative stacking:**
+2. **Calculate multiplicative stacking:**
 
    $$
    \text{stackedResistance} = 1 - (1 - \text{currentResistance}) \times (1 - \text{moduleResistance})
    $$
    
-   This represents the resistance if modules stacked multiplicatively without diminishing returns.
+   This represents the resistance if modules stacked multiplicatively.
 
-4. **Apply diminishing returns:**
+3. **Capped resistance calculation:**
 
    $$
    \text{cappedResistance} = \text{lowerBound} + \frac{\text{stackedResistance} - \text{lowerBound}}{1 - \text{lowerBound}} \times (\text{UPPER_BOUND} - \text{lowerBound})
    $$
 
-   This formula applies diminishing returns so that 100% stacking compresses to the upper bound. The stacked resistance is compressed into the range between `lowerBound` and `UPPER_BOUND`.
+   This formula is an alternative calculation. It has higher gains until the `effectiveResistance` hits 30%, after which it will have lower gains than `stackedResistance` and that gap will increase until the `currentResistance` hits 30%. 
+   After that the gap will stay the same. This basically means that a stack going over 30% will be penalized by halving the portion going over 30%. This formula does not penalize positive stacks with a `currentResistance` over 30%.
+   Negative stacks that cross the 30% border are more heavily penalized. This is further clarified with graphs below.
 
-5. **Determine effective resistance:**
+4. **Determine effective resistance:**
 
    $$
    \text{effectiveResistance} = \begin{cases}
@@ -64,9 +61,25 @@ The heart of the calculation is the `stackDamageResistance` function, which appl
    \end{cases}
    $$
 
-   Use the capped resistance if it's above the minimum lower bound, otherwise use the stacked resistance.
+   Use the `cappedResistance` if it's above the `MIN_LOWER_BOUND`, otherwise use the `stackedResistance`.
 
    **Note:** The 75% hard cap is not applied during individual module stacking. It is only applied once at the very end after all modules have been processed.
+
+   **Visualization**
+
+   Below is a plot showing how the `effectiveResistance` changes with different base resistances when adding a module with 60% resistance. It shows values you would get from the stacked and the capped formulas and the value you will effectively get, which is always the worst of both formulas. 
+   If you look carefully you can see an interesting fact: If you stack a module and get to exactly 30% resistance, adding another module will then start at 30% resistance and not be affected by the halving penalty from the capped formula!
+
+   ![resistance_plot_positive.png](resistance_plot_positive.png)
+
+   Similarly, here is a plot for when adding a module with -60% resistance (negative resistance). It shows how the `effectiveResistance` changes with different base resistances. Interestingly, negative resistances has a less negative effect on higher base values up until the `effectiveResistance` goes below 30%.
+   This means that if a negative value is applied that causes you to go below 30%, you are penalized harder as you are quickly moved to the `stackedResistance` formula.
+
+   ![resistance_plot_negative.png](resistance_plot_negative.png)
+
+   Finally, this is what it looks like with a 0% module, which results in no change for the `effectiveResistance` compared to the base resistance, as expected. It is interesting to see how the capped and stacked formulas behave depending on the module resistance value.
+
+   ![resistance_plot_zero.png](resistance_plot_zero.png)
 
 ### Example Calculation
 
@@ -81,16 +94,12 @@ Let's say we have:
 
 **Step 2:** 
 
-    UPPER_BOUND = 0.65
-
-**Step 3:** 
-
     stackedResistance = 1 - (1 - 0.40) × (1 - 0.30)
                       = 1 - 0.60 × 0.70
                       = 1 - 0.42
                       = 0.58 (58%)
 
-**Step 4:** 
+**Step 3:** 
 
     cappedResistance = 0.40 + (0.58 - 0.40) / (1 - 0.40) × (0.65 - 0.40)
                      = 0.40 + 0.18 / 0.60 × 0.25
@@ -98,7 +107,7 @@ Let's say we have:
                      = 0.40 + 0.075
                      = 0.475 (47.5%)
 
-**Step 5:** 
+**Step 4:** 
 
 Since `cappedResistance = 0.475 ≥ 0.30`, `effectiveResistance = 0.475` (47.5%)
 
@@ -215,12 +224,15 @@ Let's calculate kinetic resistance for a ship with:
 
 ## Key Properties
 
-1. **Minimum Lower Bound**: The minimum lower bound for diminishing returns is 30% (MIN_LOWER_BOUND)
-2. **Upper Bound**: The upper bound is 65% (UPPER_BOUND), representing the maximum resistance that 100% stacking would compress to
-3. **Hard Cap**: The maximum effective resistance is hard capped at 75%, but this cap is **only applied once** at the very end after all modules have been processed, not during intermediate stacking operations
-4. **Diminishing Returns**: Resistances are compressed into a range between the lower bound and upper bound, applying diminishing returns so that 100% stacking compresses to the upper bound
-5. **High Resistance Bonus**: Modules with resistance > 30% receive a double bonus
-6. **Sequential Processing**: Modules are processed one at a time, with each module's effect depending on the cumulative resistance from previous modules
+1. **Hard Cap**: The maximum effective resistance is hard capped at 75%, but this cap is **only applied once** at the very end after all modules have been processed, not during intermediate stacking operations
+2. **High Resistance Bonus**: Modules with resistance > 30% receive a doubling bonus
+3. **Penalty Border**: Crossing the 30% resistance threshold affects both positive and negative resistances, with diminished gains above 30% and increased penalties below 30%
+4. **Sequential Processing**: Modules are processed one at a time, with each module's effect depending on the cumulative resistance from previous modules
+
+## Conclusion
+
+It is generally more beneficial to use resistance specific engineering on modules. blast/thermal/kinetic resistant can get up to 42.7% that results in 55.4% due to the bonus.
+The ideal stack ends with resistance on 30%. The following positive stacks will then not be penalized by the stacking math. In practice this is hard to achieve, but being able to avoid the penalties while stacking will result in the highest resistances.
 
 ## References
 
