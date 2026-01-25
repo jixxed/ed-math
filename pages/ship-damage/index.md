@@ -7,7 +7,7 @@ date: 2026-01-23
 modified_date: 2026-01-25
 ---
 
-# Ship Damage Calculation
+# This page is a work in progess
 
 This document explains the mathematical formulas and mechanics used to calculate and apply damage to ships in Elite: Dangerous, based on official information from Frontier Developments.
 
