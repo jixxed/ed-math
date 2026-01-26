@@ -344,10 +344,10 @@ Let's calculate kinetic resistance for a ship with:
 
 ## Conclusion
 
-It is generally more beneficial to use resistance specific engineering on modules. blast/thermal/kinetic resistant can get up to 42.7% that results in 55.4% due to the bonus.
+It is generally more beneficial to use resistance specific engineering on modules. blast/thermal/kinetic resistant modules can get up to 42.7% resistance that results in 55.4% resistance due to the bonus.
 
 The funny hull mechanic is still very much active, so using negative resistance modules when you are above 65% resistance can yield a higher resistance. Combining this with a
-high resistance module for a different resistance type will yield an increase in 2 resistance types.
+high resistance module for a different resistance type will yield an increase in 2 resistance types. Using positive resistance modules with hurt your resistance when you are above 65%.
 
 Crossing the 30% border has an impact on the effectiveness of module being stacked, so careful planning of module selection can maximize resistance yields. To minimize losses, you want your stack to end as closely on either side of the 30% border as possible.
 
