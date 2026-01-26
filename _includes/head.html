@@ -16,6 +16,18 @@
         SVG: { linebreaks: { automatic: true } }
       });
     </script>
-      <script src="{{ "/assets/theme-toggle.js" | relative_url }}" defer></script>
+    <script src="{{ "/assets/theme-toggle.js" | relative_url }}" defer></script>
+    
+    <!-- Mermaid.js for diagram rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- Vega and Vega-Lite for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    
+    <!-- Initialize diagrams -->
+    <script src="{{ "/assets/diagram-init.js" | relative_url }}" defer></script>
+    
     {%- feed_meta -%}
   </head>

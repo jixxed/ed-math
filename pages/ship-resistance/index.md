@@ -68,18 +68,124 @@ The heart of the calculation is the `stackDamageResistance` function. It diminis
    **Visualization**
 
    Below is a plot showing how the `effectiveResistance` changes with different base resistances when adding a module with 60% resistance. It shows values you would get from the stacked and the capped formulas and the value you will effectively get, which is always the worst of both formulas. 
-   If you look carefully you can see an interesting fact: If you stack a module and get to exactly 30% resistance, adding another module will then start at 30% resistance and not be affected by the halving penalty from the capped formula!
 
-   ![resistance_plot_positive.png](resistance_plot_positive.png)
+```vega
+{
+    "$schema":"https://vega.github.io/schema/vega/v5.json",
+    "width":800,
+    "height":600,
+    "title":{"text":"Resistance value when adding a 60.0% Module","font":"Inter, system-ui, sans-serif","fontSize":20,"fontWeight":"bold","color":"#888","offset":10},
+    "data":{"name":"resistance_data","format":{"type":"csv"},"url":"60p_data.csv"},
+    "scales":[
+        {"name":"xscale","type":"linear","domain":[-200,200],"range":"width"},
+        {"name":"yscale","type":"linear","domain":[-20.000000000000018,140],"range":"height"},
+        {"name":"color","type":"ordinal","domain":["Capped Resistance","Stacked Resistance","Final Effective Resistance","30% line"],"range":["orange","red","green","purple"]}
+    ],
+    "axes":[
+        {"scale":"xscale","orient":"bottom","title":"Starting Resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"},
+        {"scale":"yscale","orient":"left","title":"Effective resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"}
+    ],
+    "legends":[
+        {
+            "stroke":"color",
+            "title":"Legend",
+            "orient":"top-left",
+            "encode":{
+                "symbols":{"update":{"shape":{"value":"stroke"},"strokeDash":{"value":[2,2]},"strokeWidth":{"value":1.5}}},
+                "labels":{"update":{"fontSize":{"value":12},"fill":{"value":"#888"}}},
+                "title":{"update":{"fontSize":{"value":14},"fill":{"value":"#888"},"fontWeight":{"value":"bold"}}}
+            }
+        }
+    ],
+    "marks":[
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"capped"},"stroke":{"value":"orange"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"stacked"},"stroke":{"value":"red"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"final"},"stroke":{"value":"green"},"strokeDash":{"value":[4,4]},"strokeWidth":{"value":4}}}},
+        {"type":"rule","encode":{"enter":{"x":{"scale":"xscale","value":30},"y":{"value":0},"y2":{"field":{"group":"height"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}},
+        {"type":"rule","encode":{"enter":{"y":{"scale":"yscale","value":30},"x":{"value":0},"x2":{"field":{"group":"width"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}}
+    ]
+}
+```
 
    Similarly, here is a plot for when adding a module with -60% resistance (negative resistance). It shows how the `effectiveResistance` changes with different base resistances. Interestingly, negative resistances has a less negative effect on higher base values up until the `effectiveResistance` goes below 30%.
-   This means that if a negative value is applied that causes you to go below 30%, you are penalized harder as you are quickly moved to the `stackedResistance` formula.
 
-   ![resistance_plot_negative.png](resistance_plot_negative.png)
+```vega
+{
+    "$schema":"https://vega.github.io/schema/vega/v5.json",
+    "width":800,
+    "height":600,
+    "title":{"text":"Resistance value when adding a -60.0% Module","font":"Inter, system-ui, sans-serif","fontSize":20,"fontWeight":"bold","color":"#888","offset":10},
+    "data":{"name":"resistance_data","format":{"type":"csv"},"url":"-60p_data.csv"},
+    "scales":[
+        {"name":"xscale","type":"linear","domain":[-200,200],"range":"width"},
+        {"name":"yscale","type":"linear","domain":[-380,281],"range":"height"},
+        {"name":"color","type":"ordinal","domain":["Capped Resistance","Stacked Resistance","Final Effective Resistance","30% line"],"range":["orange","red","green","purple"]}
+    ],
+    "axes":[
+        {"scale":"xscale","orient":"bottom","title":"Starting Resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"},
+        {"scale":"yscale","orient":"left","title":"Effective resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"}
+    ],
+    "legends":[
+        {
+            "stroke":"color",
+            "title":"Legend",
+            "orient":"top-left",
+            "encode":{
+                "symbols":{"update":{"shape":{"value":"stroke"},"strokeDash":{"value":[2,2]},"strokeWidth":{"value":1.5}}},
+                "labels":{"update":{"fontSize":{"value":12},"fill":{"value":"#888"}}},
+                "title":{"update":{"fontSize":{"value":14},"fill":{"value":"#888"},"fontWeight":{"value":"bold"}}}
+            }
+        }
+    ],
+    "marks":[
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"capped"},"stroke":{"value":"orange"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"stacked"},"stroke":{"value":"red"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"final"},"stroke":{"value":"green"},"strokeDash":{"value":[4,4]},"strokeWidth":{"value":4}}}},
+        {"type":"rule","encode":{"enter":{"x":{"scale":"xscale","value":30},"y":{"value":0},"y2":{"field":{"group":"height"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}},
+        {"type":"rule","encode":{"enter":{"y":{"scale":"yscale","value":30},"x":{"value":0},"x2":{"field":{"group":"width"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}}
+    ]
+}
+```
 
    Finally, this is what it looks like with a 0% module, which results in no change for the `effectiveResistance` compared to the base resistance, as expected. It is interesting to see how the capped and stacked formulas behave depending on the module resistance value.
 
-   ![resistance_plot_zero.png](resistance_plot_zero.png)
+```vega
+{
+    "$schema":"https://vega.github.io/schema/vega/v5.json",
+    "width":800,
+    "height":600,
+    "title":{"text":"Resistance value when adding a 0.0% Module","font":"Inter, system-ui, sans-serif","fontSize":20,"fontWeight":"bold","color":"#888","offset":10},
+    "data":{"name":"resistance_data","format":{"type":"csv"},"url":"0p_data.csv"},
+    "scales":[
+        {"name":"xscale","type":"linear","domain":[-200,200],"range":"width"},
+        {"name":"yscale","type":"linear","domain":[-200,200],"range":"height"},
+        {"name":"color","type":"ordinal","domain":["Capped Resistance","Stacked Resistance","Final Effective Resistance","30% line"],"range":["orange","red","green","purple"]}
+    ],
+    "axes":[
+        {"scale":"xscale","orient":"bottom","title":"Starting Resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"},
+        {"scale":"yscale","orient":"left","title":"Effective resistance (%)","labelColor":"#888","titleColor":"#888","labelFontSize":12,"titleFontSize":14,"gridColor":"#888"}
+    ],
+    "legends":[
+        {
+            "stroke":"color",
+            "title":"Legend",
+            "orient":"top-left",
+            "encode":{
+                "symbols":{"update":{"shape":{"value":"stroke"},"strokeDash":{"value":[2,2]},"strokeWidth":{"value":1.5}}},
+                "labels":{"update":{"fontSize":{"value":12},"fill":{"value":"#888"}}},
+                "title":{"update":{"fontSize":{"value":14},"fill":{"value":"#888"},"fontWeight":{"value":"bold"}}}
+            }
+        }
+    ],
+    "marks":[
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"capped"},"stroke":{"value":"orange"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"stacked"},"stroke":{"value":"red"},"strokeWidth":{"value":4}}}},
+        {"type":"line","from":{"data":"resistance_data"},"encode":{"enter":{"x":{"scale":"xscale","field":"x"},"y":{"scale":"yscale","field":"final"},"stroke":{"value":"green"},"strokeDash":{"value":[4,4]},"strokeWidth":{"value":4}}}},
+        {"type":"rule","encode":{"enter":{"x":{"scale":"xscale","value":30},"y":{"value":0},"y2":{"field":{"group":"height"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}},
+        {"type":"rule","encode":{"enter":{"y":{"scale":"yscale","value":30},"x":{"value":0},"x2":{"field":{"group":"width"}},"stroke":{"value":"purple"},"strokeDash":{"value":[2,2]}}}}
+    ]
+}
+```
 
 ### Example Calculation
 
