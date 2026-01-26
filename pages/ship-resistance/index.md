@@ -23,8 +23,8 @@ The heart of the calculation is the `stackDamageResistance` function. It diminis
 
 ### Constants
 
-- **MIN_LOWER_BOUND**: 0.30. The lower bound for the `cappedResistance` formula is set to at least 30%.
-- **UPPER_BOUND**: 0.65. The upper bound for the `cappedResistance` formula is set to at least 65%.
+- **MIN_LOWER_BOUND**: 0.30. The lower bound for the `cappedResistance` formula is set to at least 30%. This represents a boundary for diminished returns.
+- **UPPER_BOUND**: 0.65. The upper bound for the `cappedResistance` formula is set to at least 65%. This represents a soft cap on resistance gains.
 
 ### Formula Steps
 
@@ -50,7 +50,8 @@ The heart of the calculation is the `stackDamageResistance` function. It diminis
 
    This formula is an alternative calculation. It has higher gains until the `effectiveResistance` hits 30%, after which it will have lower gains than `stackedResistance` and that gap will increase until the `currentResistance` hits 30%. 
    After that the gap will stay the same. This basically means that a stack going over 30% will be penalized by halving the portion going over 30%. This formula does not penalize positive stacks with a `currentResistance` over 30%.
-   Negative stacks that cross the 30% border are more heavily penalized. This is further clarified with graphs below.
+   Negative stacks that cross the 30% border are more heavily penalized. This is further clarified with graphs below. The name "cappedResistance" is a bit misleading, as it is not actually capped.
+   Its original intent was to cap resistances, but it fails to do so properly.
 
 4. **Determine effective resistance:**
 
