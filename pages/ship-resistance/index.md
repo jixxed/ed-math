@@ -336,7 +336,7 @@ Let's calculate kinetic resistance for a ship with:
 
 ## Key Properties
 
-1. **Soft Cap**: The maximum effective resistance is soft capped at 65%. If your starting resistance is below 65%, you will be unable to exceed this, because modules are processed low to high, and to break this you would need to process lower resistance modules after higher ones.
+1. **Soft Cap**: The maximum effective resistance is soft capped at 65%. If your starting resistance is below 65%, you will be unable to exceed this, because modules are processed low to high, and to break this you would need to process lower resistance modules after higher ones. Also if your starting resistance is above 65%, you will be unable to go below this.
 2. **Hard Cap**: The maximum effective resistance is hard capped at 75%, but this cap is **only applied once** at the very end after all modules have been processed, not during intermediate stacking operations. You can reach this with negative resistance stacking and a base resistance over 65%. 
 3. **High Resistance Bonus**: Modules with resistance > 30% receive a doubling bonus
 4. **Penalty Border**: Crossing the 30% resistance threshold affects both positive and negative resistances, with diminished gains above 30% and increased penalties below 30%
@@ -347,7 +347,7 @@ Let's calculate kinetic resistance for a ship with:
 
 It is generally more beneficial to use resistance specific engineering on modules. blast/thermal/kinetic resistant modules can get up to 42.7% resistance that results in 55.4% resistance due to the bonus.
 
-The funny hull mechanic is still very much active, so using negative resistance modules when you are above 65% resistance can yield a higher resistance. Combining this with a
+The funny hull mechanic is still very much active, so using negative resistance modules when you are above 65% resistance can yield a higher resistance up to the hard cap of 75%. Combining this with a
 high resistance module for a different resistance type will yield an increase in 2 resistance types. Using positive resistance modules with hurt your resistance when you are above 65%.
 
 Crossing the 30% border has an impact on the effectiveness of module being stacked, so careful planning of module selection can maximize resistance yields. To minimize losses, you want your stack to end as closely on either side of the 30% border as possible.
