@@ -57,7 +57,7 @@ $$
 - The fuel usage scales linearly with the distance of the jump and the used storage capacity of the carrier, but because of the flat addition of `BASE_FUEL_PER_JUMP` it is cheaper to jump the same distance in fewer jumps. For example jumping 2000Ly in 5 x 400Ly jumps costs 5T Tritium more than 4 x 500Ly jumps, no mather the storage capacity used. 
 - The minimum fuel used is 5T and the maximum is 133T for the Fleet Carrier. In-system jumps of 0 Ly always cost 5T of Tritium, no mather the capacity used.
 - If the jump is cancelled due to insufficient fuel, the fuel cost is not deducted from the carrier's fuel reservoir. 
-- ??The fuel cost is only deducted when the jump is successfully executed.
+- The fuel cost is only deducted when the jump is successfully executed. Manual cancellation in the 10-minute window after the request does not incur any costs.
 
 ## Failure sequence
 
