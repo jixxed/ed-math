@@ -26,7 +26,7 @@ Where:
 - distance = Jump distance in light years
 - capacityUsed = Current carrier capacity used (Crew + Cargo + CargoSpaceReserved + ShipPacks + ModulePacks)
 - fuelInReservoir = Fuel in reservoir in tons. 0 - 1000 tons
-- carrierCapacity = Carrier's total capacity in tons. 25000 tons for a Fleet Carrier, 60000 tons for a Squadron Carrier.
+- carrierCapacity = Carrier's total capacity in tons. 25000 tons for a Fleet Carrier, 60000 tons for a Squadron Carrier.(TODO: test Squadron Carrier fuel use)
 - BASE_FUEL_PER_JUMP = 5 tons
 
 The minimum fuel cost for any jump is 5 tons of Tritium.
