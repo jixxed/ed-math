@@ -12,7 +12,8 @@ This document explains the mathematical formula used to calculate the amount of 
 ## Overview
 
 The fuel per jump is influenced by the distance of the jump and the used storage capacity of the carrier.
-The cost is calculated at the time of the jump.(TODO: or jump schedule?)
+The exact fuel consumption is calculated at the time of the jump. It is possible to plot a course that is valid at the time of plotting but becomes invalid at the time of jumping if the fuel cost surpasses the available fuel due to changes in the used storage capacity of the carrier.
+This will trigger some messages from the Deck Officer of the Carrier and ultimately in an [unknown failure](#failure-sequence).
 
 ## Formula
 
@@ -55,3 +56,11 @@ $$
 
 - The fuel usage scales linearly with the distance of the jump and the used storage capacity of the carrier, but because of the flat addition of `BASE_FUEL_PER_JUMP` it is cheaper to jump the same distance in fewer jumps. For example jumping 2000Ly in 5 x 400Ly jumps costs 5T Tritium more than 4 x 500Ly jumps, no mather the storage capacity used. 
 - The minimum fuel used is 5T and the maximum is 133T for the Fleet Carrier. In-system jumps of 0 Ly always cost 5T of Tritium, no mather the capacity used.
+- If the jump is cancelled due to insufficient fuel, the fuel cost is not deducted from the carrier's fuel reservoir. 
+- ??The fuel cost is only deducted when the jump is successfully executed.
+
+## Failure sequence
+
+This is the sequence of messages that the Deck Officer of the Carrier will say when the jump is attempted but the fuel cost surpasses the available fuel in the reservoir during the jump sequence:
+
+![attention_1.png](attention_1.png) ![attention_2.png](attention_2.png) ![aborted.png](aborted.png) ![unknown_failure.png](unknown_failure.png)
