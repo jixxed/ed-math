@@ -19,13 +19,13 @@ The cost is calculated at the time of the jump.(TODO: or jump schedule?)
 The fuel cost is calculated using the following formula:
 
 $$
-\text{fuel} = \text{round}\left(BASE\_FUEL\_PER\_JUMP + \frac{distance \times (capacityUsed + fuelInResevoir + carrierCapacity)}{8 \times carrierCapacity}\right)
+\text{fuel} = \text{round}\left(BASE\_FUEL\_PER\_JUMP + \frac{distance \times (capacityUsed + fuelInReservoir + carrierCapacity)}{8 \times carrierCapacity}\right)
 $$
 
 Where:
 - distance = Jump distance in light years
 - capacityUsed = Current carrier capacity used (Crew + Cargo + CargoSpaceReserved + ShipPacks + ModulePacks)
-- fuelInResevoir = Fuel in reservoir in tons. 0 - 1000 tons
+- fuelInReservoir = Fuel in reservoir in tons. 0 - 1000 tons
 - carrierCapacity = Carrier's total capacity in tons. 25000 tons for a Fleet Carrier, 60000 tons for a Squadron Carrier.
 - BASE_FUEL_PER_JUMP = 5 tons
 
@@ -36,7 +36,7 @@ The minimum fuel cost for any jump is 5 tons of Tritium.
 For a Fleet Carrier with:
 - Current capacity used (capacityUsed) = 5,000 tons
 - Jump distance (distance) = 500 Ly
-- Fuel in reservoir (fuelInResevoir) = 1,000 tons
+- Fuel in reservoir (fuelInReservoir) = 1,000 tons
 - Carrier capacity (carrierCapacity) = 25,000 tons
 
 The calculation would be:
