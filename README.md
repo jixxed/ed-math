@@ -2,6 +2,8 @@
 
 A documentation website for Elite: Dangerous mathematical formulas and calculations, built with Jekyll and hosted on GitHub Pages.
 
+Visit the pages here: https://jixxed.github.io/ed-math/
+
 ## Features
 
 - 📝 Markdown-based content
