@@ -233,3 +233,4 @@ Let's trace a kinetic damage shot from a multicannon hitting an Anaconda:
 This documentation is based on official information from Frontier Developments:
 
 - [Discussion with Mark Allen on damage and defenses](https://web.archive.org/web/20151009025620/https://forums.frontier.co.uk/showthread.php?t=170205) - Original forum post by Mark Allen (Frontier Employee) from July 28, 2015
+- [Elite: Dangerous Armor and Module Damage Mechanics](https://docs.google.com/document/d/1ckmUHRprZRlsBJIxK6ESWOPn1_uP68Gq3Sk_uYERP9s)

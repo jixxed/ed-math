@@ -5,7 +5,6 @@ description: "Mathematical explanation of how mass curve multipliers are calcula
 author: CMDR Jixxed
 date: 2026-02-07
 modified_date: 2026-02-07
-wip: true
 ---
 
 This document explains the mathematical formula used to calculate mass curve multipliers for thrusters and shields in Elite: Dangerous. These multipliers determine how module performance scales with ship mass.
@@ -25,7 +24,7 @@ $$
 Where the power term is:
 
 $$
-\text{powerTerm} = \min\left(1.0, \frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}\right)^{\text{exponent}}
+\text{powerTerm} = clamp\left(\frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}, 0, 1\right)^{\text{exponent}}
 $$
 
 And the exponent is:
@@ -56,10 +55,10 @@ $$
 \text{massRatio} = \frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}
 $$
 
-This ratio is then clamped to a maximum of 1.0:
+This ratio is then clamped between a value of 0 and 1:
 
 $$
-\text{clampedMassRatio} = \min(1.0, \text{massRatio})
+\text{clampedMassRatio} = clamp(\text{massRatio}, 0 , 1)
 $$
 
 ### Step 2: Exponent Calculation
@@ -104,7 +103,7 @@ This is what the mass curve multplier looks like for a module with the following
 	"title": {"text": "Mass curve multiplier for 7A Thrusters","font": "Inter, system-ui, sans-serif","fontSize": 20,"fontWeight": "bold","color": "#888","offset": 10},
 	"data":{"name":"resistance_data","format":{"type":"csv"},"url":"mcm_values.csv"},
 	"scales": [
-		{"name": "xscale","type": "linear","domain": [1080.0,3240.0],"zero": false,"range": "width"},
+		{"name": "xscale","type": "linear","domain": [500.0,4000.0],"zero": false,"range": "width"},
 		{"name": "yscale","type": "linear","domain": [90.0,120.0],"zero": false,"range": "height"}
 	],
 	"axes": [
@@ -134,7 +133,7 @@ $$
 \text{massRatio} = \frac{800 - 400}{800 - 100} = \frac{400}{700} \approx 0.571
 $$
 $$
-\text{clampedMassRatio} = \min(1.0, 0.571) = 0.571
+\text{clampedMassRatio} = clamp(0.571, 0, 1) = 0.571
 $$
 
 **Step 2 - Exponent Calculation:**
@@ -160,12 +159,20 @@ $$
 1. **Optimal Performance**: The curve is designed to pass through the optimal multiplier at the optimal mass
 2. **Bounded Output**: The result is always between the minimum and maximum multipliers
 3. **Smooth Transition**: The logarithmic exponent ensures smooth transitions between mass ranges
-4. **Mass Clamping**: When mass is below minimumMass, the multiplier equals maximumMultiplier
+4. **Mass Clamping**: When mass is below minimumMass, the multiplier equals maximumMultiplier. When mass is above maximumMass, the multiplier equals minimumMultiplier
 5. **Diminishing Returns**: Performance degrades more as mass increases
+
+## Conclusion
+
+It is possible to equip modules below the minimum mass, but the performance will be capped at the maximum multiplier. 
+Equipping modules above the maximum mass will result in a significant performance penalty, as the multiplier will be capped at the minimum multiplier.
+
+Only through swapping experimental effects is it possible to equip modules above the maximum mass, but this has limited practical benefits. 
+One such case it to build a maximum jump range ship for setting world records. The game blocks all other module changes that would exceed the maximum mass.
 
 ## Mathematical Behavior
 
-- When **mass = minimumMass**: The multiplier equals **maximumMultiplier**
+- When **mass <= minimumMass**: The multiplier equals **maximumMultiplier**
 - When **mass = optimalMass**: The multiplier equals **optimalMultiplier**
-- When **mass = maximumMass**: The multiplier equals **minimumMultiplier**
+- When **mass >= maximumMass**: The multiplier equals **minimumMultiplier**
 
