@@ -5,6 +5,7 @@ description: "Mathematical explanation of how damage is calculated and applied t
 author: CMDR Jixxed
 date: 2026-01-23
 modified_date: 2026-01-25
+wip: true
 ---
 
 # This page is a work in progess

@@ -5,6 +5,7 @@ description: "Mathematical explanation of how mass curve multipliers are calcula
 author: CMDR Jixxed
 date: 2026-02-07
 modified_date: 2026-02-07
+wip: true
 ---
 
 This document explains the mathematical formula used to calculate mass curve multipliers for thrusters and shields in Elite: Dangerous. These multipliers determine how module performance scales with ship mass.

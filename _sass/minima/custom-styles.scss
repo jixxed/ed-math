@@ -50,6 +50,21 @@
   }
 }
 
+// WIP label styles
+.wip-label {
+  display: inline-block;
+  background-color: #ff6b35;
+  color: white;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  margin-left: 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+
 // MathJax styles
 .MathJax_Display {
   overflow-x: auto;
