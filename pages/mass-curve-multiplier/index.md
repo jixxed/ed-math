@@ -18,7 +18,7 @@ The mass curve multiplier formula is used by thrusters and shields to adjust the
 The mass curve multiplier is calculated using the following formula:
 
 $$
-\text{multiplier} = clamp\left(\text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier}), \text{minimumMultiplier}, \text{maximumMultiplier}\right)
+\text{multiplier} = clamp\left(\text{minMultiplier} + \text{powerTerm} \times (\text{maxMultiplier} - \text{minMultiplier}), \text{minMultiplier}, \text{maxMultiplier}\right)
 $$
 
 Where the power term is:
@@ -26,18 +26,23 @@ Where the power term is:
 $$
 \text{powerTerm} = clamp\left(\frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}, 0, 1\right)^{\text{exponent}}
 $$
+
 And the exponent is:
 
 $$
 \text{exponent} = \frac{\text{numerator}}{\text{denominator}}
 $$
+
 Where the numerator and denominator are calculated as follows:
+
 $$
-\text{numerator} = {\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}
+\text{numerator} = {\ln\left(\frac{\text{optMultiplier} - \text{minMultiplier}}{\text{maxMultiplier} - \text{minMultiplier}}\right)}
 $$
+
 $$
 \text{denominator} = \ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)
 $$
+
 $$
 \text{denominator} = \begin{cases}
 \text{-EPSILON} & \text{if } \text{denominator} = 0.0 \\
@@ -53,9 +58,9 @@ The formula uses the following parameters from thruster and shield modules:
 - **minimumMass**: The minimum mass at which the module operates
 - **maximumMass**: The maximum mass at which the module operates
 - **optimalMass**: The mass at which the module performs optimally
-- **minimumMultiplier**: The performance multiplier at minimum mass
-- **maximumMultiplier**: The performance multiplier at maximum mass
-- **optimalMultiplier**: The performance multiplier at optimal mass
+- **minMultiplier**: The performance multiplier at minimum mass
+- **maxMultiplier**: The performance multiplier at maximum mass
+- **optMultiplier**: The performance multiplier at optimal mass
 
 ## Formula Breakdown
 
@@ -79,12 +84,15 @@ The exponent determines the shape of the power curve. It's calculated using loga
 
 
 First, calculate the logarithm term:
+
 $$
-\text{numerator} = {\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}
+\text{numerator} = {\ln\left(\frac{\text{optMultiplier} - \text{minMultiplier}}{\text{maxMultiplier} - \text{minMultiplier}}\right)}
 $$
+
 $$
 \text{denominator} = \ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)
 $$
+
 $$
 \text{denominator} = \begin{cases}
 \text{-EPSILON} & \text{if } \text{denominator} = 0.0 \\
@@ -110,15 +118,15 @@ $$
 Finally, the power term is scaled and offset to produce the final multiplier, which is then clamped to ensure it stays within the valid range:
 
 $$
-\text{multiplier} = clamp\left(\text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier}), \text{minimumMultiplier}, \text{maximumMultiplier}\right)
+\text{multiplier} = clamp\left(\text{minMultiplier} + \text{powerTerm} \times (\text{maxMultiplier} - \text{minMultiplier}), \text{minMultiplier}, \text{maxMultiplier}\right)
 $$
 
 ## Visual representation
 
 This is what the mass curve multiplier looks like for a module with the following parameters:
-- minimumMultiplier = 96
-- optimalMultiplier = 100
-- maximumMultiplier = 116
+- minMultiplier = 96
+- optMultiplier = 100
+- maxMultiplier = 116
 - minimumMass = 1080
 - optimalMass = 2160
 - maximumMass = 3240
@@ -144,9 +152,9 @@ This is what the mass curve multiplier looks like for a module with the followin
 }
 ```
 This is what the mass curve multiplier looks like for the Mk II Agile thruster module which has the following parameters:
-- minimumMultiplier = 96
-- optimalMultiplier = 100
-- maximumMultiplier = 116
+- minMultiplier = 96
+- optMultiplier = 100
+- maxMultiplier = 116
 - minimumMass = 420
 - optimalMass = 420
 - maximumMass = 1260
@@ -178,9 +186,9 @@ For a thruster module with the following parameters:
 - minimumMass = 100 tons
 - maximumMass = 800 tons
 - optimalMass = 200 tons
-- minimumMultiplier = 0.5
-- maximumMultiplier = 1.2
-- optimalMultiplier = 1.0
+- minMultiplier = 0.5
+- maxMultiplier = 1.2
+- optMultiplier = 1.0
 
 **Step 1 - Mass Normalization:**
 
@@ -196,10 +204,13 @@ $$
 $$
 \text{numerator} = \ln\left(\frac{1.0 - 0.5}{1.2 - 0.5}\right) = \ln\left(\frac{0.5}{0.7}\right) = \ln(0.714\ldots) \approx -0.336
 $$
+
 $$
 \text{denominator} = \ln\left(\frac{800 - 200}{800 - 100}\right) = \ln\left(\frac{600}{700}\right) = \ln(0.857\ldots) \approx -0.154
 $$
+
 Since the denominator is not zero, we use it as-is:
+
 $$
 \text{exponent} = \frac{\text{numerator}}{\text{denominator}} \approx \frac{-0.336}{-0.154} \approx 2.18
 $$
@@ -221,7 +232,7 @@ $$
 1. **Optimal Performance**: The curve is designed to pass through the optimal multiplier at the optimal mass
 2. **Bounded Output**: The result is always between the minimum and maximum multipliers
 3. **Smooth Transition**: The logarithmic exponent ensures smooth transitions between mass ranges
-4. **Mass Clamping**: When mass is below minimumMass, the multiplier equals maximumMultiplier. When mass is above maximumMass, the multiplier equals minimumMultiplier
+4. **Mass Clamping**: When mass is below minimumMass, the multiplier equals maxMultiplier. When mass is above maximumMass, the multiplier equals minMultiplier
 5. **Diminishing Returns**: Performance degrades more as mass increases
 
 ## Conclusion
@@ -234,7 +245,7 @@ One such case it to build a maximum jump range ship for setting world records. T
 
 ## Mathematical Behavior
 
-- When **mass <= minimumMass**: The multiplier equals **maximumMultiplier**
-- When **mass = optimalMass**: The multiplier equals **optimalMultiplier**
-- When **mass >= maximumMass**: The multiplier equals **minimumMultiplier**
+- When **mass <= minimumMass**: The multiplier equals **maxMultiplier**
+- When **mass = optimalMass**: The multiplier equals **optMultiplier**
+- When **mass >= maximumMass**: The multiplier equals **minMultiplier**
 
