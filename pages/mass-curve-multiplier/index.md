@@ -18,7 +18,7 @@ The mass curve multiplier formula is used by thrusters and shields to adjust the
 The mass curve multiplier is calculated using the following formula:
 
 $$
-\text{multiplier} = \text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier})
+\text{multiplier} = clamp\left(\text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier}), \text{minimumMultiplier}, \text{maximumMultiplier}\right)
 $$
 
 Where the power term is:
@@ -26,11 +26,23 @@ Where the power term is:
 $$
 \text{powerTerm} = clamp\left(\frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}, 0, 1\right)^{\text{exponent}}
 $$
-
 And the exponent is:
 
 $$
-\text{exponent} = \frac{\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}{\ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)}
+\text{exponent} = \frac{\text{numerator}}{\text{denominator}}
+$$
+Where the numerator and denominator are calculated as follows:
+$$
+\text{numerator} = {\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}
+$$
+$$
+\text{denominator} = \ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)
+$$
+$$
+\text{denominator} = \begin{cases}
+\text{-EPSILON} & \text{if } \text{denominator} = 0.0 \\
+\text{denominator} & \text{otherwise}
+\end{cases}
 $$
 
 ## Parameters
@@ -55,7 +67,7 @@ $$
 \text{massRatio} = \frac{\text{maximumMass} - \text{mass}}{\text{maximumMass} - \text{minimumMass}}
 $$
 
-This ratio is then clamped between a value of 0 and 1:
+This ratio is then clamped between a value of 0 and 1, because even though there are safeguards in the game, it is possible to exceed minimum and maximum mass:
 
 $$
 \text{clampedMassRatio} = clamp(\text{massRatio}, 0 , 1)
@@ -63,12 +75,28 @@ $$
 
 ### Step 2: Exponent Calculation
 
-The exponent determines the shape of the power curve. It's calculated using logarithmic interpolation to ensure the curve passes through the optimal point:
+The exponent determines the shape of the power curve. It's calculated using logarithmic interpolation to ensure the curve passes through the optimal point.
+
+
+First, calculate the logarithm term:
+$$
+\text{numerator} = {\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}
+$$
+$$
+\text{denominator} = \ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)
+$$
+$$
+\text{denominator} = \begin{cases}
+\text{-EPSILON} & \text{if } \text{denominator} = 0.0 \\
+\text{denominator} & \text{otherwise}
+\end{cases}
+$$
+
+Then calculate the exponent:
 
 $$
-\text{exponent} = \frac{\ln\left(\frac{\text{optimalMultiplier} - \text{minimumMultiplier}}{\text{maximumMultiplier} - \text{minimumMultiplier}}\right)}{\ln\left(\frac{\text{maximumMass} - \text{optimalMass}}{\text{maximumMass} - \text{minimumMass}}\right)}
+\text{exponent} = \frac{\text{numerator}}{\text{denominator}}
 $$
-
 ### Step 3: Power Term Calculation
 
 The power term applies the exponential curve to the normalized mass:
@@ -79,15 +107,15 @@ $$
 
 ### Step 4: Final Multiplier
 
-Finally, the power term is scaled and offset to produce the final multiplier:
+Finally, the power term is scaled and offset to produce the final multiplier, which is then clamped to ensure it stays within the valid range:
 
 $$
-\text{multiplier} = \text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier})
+\text{multiplier} = clamp\left(\text{minimumMultiplier} + \text{powerTerm} \times (\text{maximumMultiplier} - \text{minimumMultiplier}), \text{minimumMultiplier}, \text{maximumMultiplier}\right)
 $$
 
 ## Visual representation
 
-This is what the mass curve multplier looks like for a module with the following parameters:
+This is what the mass curve multiplier looks like for a module with the following parameters:
 - minimumMultiplier = 96
 - optimalMultiplier = 100
 - maximumMultiplier = 116
@@ -115,7 +143,34 @@ This is what the mass curve multplier looks like for a module with the following
 	]
 }
 ```
+This is what the mass curve multiplier looks like for the Mk II Agile thruster module which has the following parameters:
+- minimumMultiplier = 96
+- optimalMultiplier = 100
+- maximumMultiplier = 116
+- minimumMass = 420
+- optimalMass = 420
+- maximumMass = 1260
 
+```vega
+{
+	"$schema": "https://vega.github.io/schema/vega/v5.json",
+	"width": 800,
+	"height": 600,
+	"title": {"text": "Mass curve multiplier for 5A Mk II Agile Thrusters","font": "Inter, system-ui, sans-serif","fontSize": 20,"fontWeight": "bold","color": "#888","offset": 10},
+	"data":{"name":"resistance_data","format":{"type":"csv"},"url":"mcm_mk2_values.csv"},
+	"scales": [
+		{"name": "xscale","type": "linear","domain": [300.0,600.0],"zero": false,"range": "width"},
+		{"name": "yscale","type": "linear","domain": [90.0,120.0],"zero": false,"range": "height"}
+	],
+	"axes": [
+		{"scale": "xscale","orient": "bottom","title": "Ship mass","labelColor": "#888","titleColor": "#888","labelFontSize": 12,"titleFontSize": 14,"grid": true,"gridColor": "#888"},
+		{"scale": "yscale","orient": "left","title": "Mass curve multiplier (%)","labelColor": "#888","titleColor": "#888","labelFontSize": 12,"titleFontSize": 14,"grid": true,"gridColor": "#888"}
+	],
+	"marks": [
+		{"type": "line","from": {"data": "resistance_data"},"encode": {"enter": {"x": {"scale": "xscale","field": "x"},"y": {"scale": "yscale","field": "mcm"},"stroke": {"value": "orange"},"strokeWidth": {"value": 2}}}}
+	]
+}
+```
 ## Example Calculation
 
 For a thruster module with the following parameters:
@@ -139,7 +194,14 @@ $$
 **Step 2 - Exponent Calculation:**
 
 $$
-\text{exponent} = \frac{\ln\left(\frac{1.0 - 0.5}{1.2 - 0.5}\right)}{\ln\left(\frac{800 - 200}{800 - 100}\right)} = \frac{\ln\left(\frac{0.5}{0.7}\right)}{\ln\left(\frac{600}{700}\right)} = \frac{\ln(0.714)}{\ln(0.857)} \approx \frac{-0.336}{-0.154} \approx 2.18
+\text{numerator} = \ln\left(\frac{1.0 - 0.5}{1.2 - 0.5}\right) = \ln\left(\frac{0.5}{0.7}\right) = \ln(0.714\ldots) \approx -0.336
+$$
+$$
+\text{denominator} = \ln\left(\frac{800 - 200}{800 - 100}\right) = \ln\left(\frac{600}{700}\right) = \ln(0.857\ldots) \approx -0.154
+$$
+Since the denominator is not zero, we use it as-is:
+$$
+\text{exponent} = \frac{\text{numerator}}{\text{denominator}} \approx \frac{-0.336}{-0.154} \approx 2.18
 $$
 
 **Step 3 - Power Term:**
@@ -151,7 +213,7 @@ $$
 **Step 4 - Final Multiplier:**
 
 $$
-\text{multiplier} = 0.5 + 0.295 \times (1.2 - 0.5) = 0.5 + 0.295 \times 0.7 \approx 0.5 + 0.206 = 0.706
+\text{multiplier} = clamp(0.5 + 0.295 \times (1.2 - 0.5), 0.5, 1.2) = clamp(0.5 + 0.295 \times 0.7, 0.5, 1.2) = clamp(0.706, 0.5, 1.2) = 0.706
 $$
 
 ## Key Properties
@@ -164,10 +226,10 @@ $$
 
 ## Conclusion
 
-It is possible to equip modules below the minimum mass, but the performance will be capped at the maximum multiplier. 
+It is possible to equip modules below the minimum mass, but the performance will be capped at the maximum multiplier.
 Equipping modules above the maximum mass will result in a significant performance penalty, as the multiplier will be capped at the minimum multiplier.
 
-Only through swapping experimental effects is it possible to equip modules above the maximum mass, but this has limited practical benefits. 
+Only through swapping experimental effects is it possible to equip modules above the maximum mass, but this has limited practical benefits.
 One such case it to build a maximum jump range ship for setting world records. The game blocks all other module changes that would exceed the maximum mass.
 
 ## Mathematical Behavior
