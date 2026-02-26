@@ -104,7 +104,7 @@ This is what the mass curve multplier looks like for a module with the following
 	"title": {"text": "Mass curve multiplier for 7A Thrusters","font": "Inter, system-ui, sans-serif","fontSize": 20,"fontWeight": "bold","color": "#888","offset": 10},
 	"data":{"name":"resistance_data","format":{"type":"csv"},"url":"mcm_values.csv"},
 	"scales": [
-		{"name": "xscale","type": "linear","domain": [1080.0,3240.0],"zero": false,"range": "width"},
+		{"name": "xscale","type": "linear","domain": [500.0,4000.0],"zero": false,"range": "width"},
 		{"name": "yscale","type": "linear","domain": [90.0,120.0],"zero": false,"range": "height"}
 	],
 	"axes": [
